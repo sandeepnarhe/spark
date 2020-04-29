@@ -1,0 +1,31 @@
+Step1: Install Python3 , Pip3, and then Jupyter
+    yum install -y python3
+    yum install python3-pip
+    pip3 install jupyter
+    jupyter notebook --ip=0.0.0.0
+
+Step2: Install Java
+    yum install -y java-1.8.0-openjdk-devel
+
+Step3: Install Scala
+    wget http://downloads.lightbend.com/scala/2.11.8/scala-2.11.8.rpm
+    sudo yum install scala-2.11.8.rpm
+
+Step4: Install Spark4J
+    pip install py4j
+
+Step4: Download Spark & Hadoop
+
+    wget http://apache.spinellicreations.com/spark/spark-2.4.5/spark-2.4.5-bin-hadoop2.7.tgz
+    sudo tar -zxvf spark-2.4.5-bin-hadoop2.7.tgz -C /usr/local
+    sudo ln -s spark-2.4.5-bin-hadoop2.7 spark
+    sudo chown -R vagrant:vagrant spark*
+
+Step5: Set the class path
+    export SPARK_HOME=/usr/local/spark    
+    export PYTHONPATH=$SPARK_HOME/python:$PYTHONPATH
+    export PYSPARK_DRIVER_PYTHON="jupyter"
+    export PYSPARK_DRIVER_PYTHON_PYTHON_OPTS="notebook"
+    export PYSPARK_PYTHON=python3
+
+    PATH=$PATH:$SPARK_HOME
