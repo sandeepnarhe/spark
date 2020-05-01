@@ -22,10 +22,72 @@ Step4: Download Spark & Hadoop
     sudo chown -R vagrant:vagrant spark*
 
 Step5: Set the class path
-    export SPARK_HOME=/usr/local/spark    
+    export SPARK_HOME=/usr/local/spark
     export PYTHONPATH=$SPARK_HOME/python:$PYTHONPATH
     export PYSPARK_DRIVER_PYTHON="jupyter"
     export PYSPARK_DRIVER_PYTHON_PYTHON_OPTS="notebook"
     export PYSPARK_PYTHON=python3
 
     PATH=$PATH:$SPARK_HOME
+
+
+--------------------------------------------------------------------------------------------------------------------------
+./sbin/start-master.sh
+cat /usr/local/spark/logs/spark-vagrant-org.apache.spark.deploy.master.Master-1-spark.example.com.out
+./sbin/start-slave.sh spark://spark.example.com:7077
+
+http://172.42.42.100:8080/
+
+jupyter notebook --ip=0.0.0.0
+
+
+--------------------------------------------
+
+Start on Hadoop yarn Cluster
+
+Update  spark-defaults.conf with below Parameter
+  spark.master yarn
+  spark.driver.memory 512m
+  spark.yarn.am.memory 512m
+  spark.executor.memory 512m
+
+ spark-shell --master yarn --deploy-mode client
+
+
+ spark-submit --deploy-mode cluster --class org.apache.spark.examples.SparkPi spark-examples_2.12-3.0.0-preview2.jar 10
+
+-------------------------------------------------
+
+
+wget http://mirror.centos.org/centos/7/os/x86_64/Packages/mysql-connector-java-5.1.25-3.el7.noarch.rpm
+
+insure that you have used 1.7 compatiable mysql java connector
+yum install -y mysql-connector-java
+
+https://www.linode.com/docs/databases/mysql/how-to-install-mysql-on-centos-7/
+
+wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+rpm -ivh mysql-community-release-el7-5.noarch.rpm
+yum update
+
+yum install mysql-server
+systemctl enable mysqld
+systemctl start mysqld
+
+mysql -u root
+mysql_secure_installation
+mysql -u root -p
+
+grant all on *.* to 'temp'@'%' identified by 'temp' with grant option;
+
+CREATE TABLE employee.emp (
+    id INT PRIMARY KEY ,
+    name VARCHAR (50) NOT NULL,
+    company VARCHAR (50) NOT NULL
+);
+
+insert into employee.emp values (1, 'sandeep', 'infosys');
+insert into employee.emp values (2, 'Vijay', 'Cognizant');
+insert into employee.emp values (3, 'Varun', 'infosys');
+insert into employee.emp values (4, 'Atul', 'Cognizant');
+insert into employee.emp values (5, 'Vilas', 'Cognizant');
